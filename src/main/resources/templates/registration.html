@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+
+
+<form th:method="POST" th:action="@{/admin/registration}" th:object="${user}">
+    <label for="name">Enter name</label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <br/>
+
+    <label for="password">Enter password</label>
+    <input type="password" th:field="*{password}" id="password"/>
+    <br/>
+
+    <label for="age">Enter age</label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <br/>
+
+    <label for="email">Enter email</label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <br/>
+
+
+    <div th:each="role : ${allRoles}">
+        <label>
+            <input th:id="${role}" type="radio" th:field="*{roles}" th:value="${role.getId()}"/>
+        </label>
+        <label th:for="${role}" th:text="${role.getName()}">Role</label>
+    </div>
+    <input type="submit" value="Create"/>
+</form>
