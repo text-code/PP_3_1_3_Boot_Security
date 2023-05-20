@@ -20,7 +20,6 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         this.userService = userService;
     }
 
-    // Spring Security использует объект Authentication, пользователя авторизованной сессии.
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest httpServletRequest,
@@ -29,8 +28,7 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
     ) throws IOException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (roles.contains("ROLE_USER")) {
-//            httpServletResponse.sendRedirect("/user/{id}");
-            User user = userService.getUserByName(authentication.getName());
+            User user = userService.getUserByUsername(authentication.getName());
             String path = "/user/" + user.getId();
             httpServletResponse.sendRedirect(path);
         } else if (roles.contains("ROLE_ADMIN")) {

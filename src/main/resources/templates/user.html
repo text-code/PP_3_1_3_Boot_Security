@@ -5,16 +5,12 @@
     <title>User</title>
 </head>
 <body>
-<p th:text="Name + ': ' + ${user.getName()}">VALUE</p>
+<p th:text="Name + ': ' + ${user.getUsername()}">VALUE</p>
 <p th:text="Password + ': ' + ${user.getPassword()}">VALUE</p>
 <p th:text="Id + ': ' + ${user.getId()}">VALUE</p>
 <p th:text="Age + ': ' + ${user.getAge()}">VALUE</p>
 <p th:text="Email + ': ' + ${user.getEmail()}">VALUE</p>
 <p th:each="role : ${user.getRoles()}" th:text="Roles + ': ' + ${role.getName()}">VALUE</p>
-
-<form th:method="GET" th:action="@{/user/{id}/edit(id=${user.getId()})}">
-    <input type="submit" value="Edit">
-</form>
 
 <div style="margin-top: 20px">
     <form action="/logout">

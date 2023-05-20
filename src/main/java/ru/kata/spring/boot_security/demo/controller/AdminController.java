@@ -4,24 +4,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
-import ru.kata.spring.boot_security.demo.service.RegistrationService;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    private final RegistrationService registrationService;
+    private final RoleService roleService;
     private final UserService userService;
-    private final RoleRepository roleRepository;
 
-    public AdminController(
-            RegistrationService registrationService, UserService userService,
-            RoleRepository roleRepository
-    ) {
-        this.registrationService = registrationService;
+    public AdminController(RoleService roleService, UserService userService) {
+        this.roleService = roleService;
         this.userService = userService;
-        this.roleRepository = roleRepository;
     }
 
     @GetMapping
@@ -38,26 +32,26 @@ public class AdminController {
 
     @GetMapping("/registration")
     public String registration(@ModelAttribute("user") User user, Model model) {
-        model.addAttribute("allRoles", roleRepository.findAll());
+        model.addAttribute("allRoles", roleService.getAllRole());
         return "registration";
     }
 
     @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("user") User user) {
-        registrationService.register(user);
+        userService.saveUser(user);
         return "redirect:/admin";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("allRoles", roleRepository.findAll());
-        return "editUser";
+        model.addAttribute("allRoles", roleService.getAllRole());
+        return "edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") User user) {
-        registrationService.register(user);
+        userService.updateUser(user);
         return "userData";
     }
 
