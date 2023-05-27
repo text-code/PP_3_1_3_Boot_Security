@@ -2,34 +2,73 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Registration</title>
+    <style>
+        #registration-form {
+            width: 400px;
+            margin: 50px auto auto;
+        }
+    </style>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
 </head>
 <body>
 
+<div class="container-fluid">
+    <div class="row">
+        <form id="registration-form" th:method="POST" th:action="@{/admin/registration}" th:object="${user}">
+            <div id="username" class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Username" th:field="*{username}">
+            </div>
 
-<form th:method="POST" th:action="@{/admin/registration}" th:object="${user}">
-    <label for="name">Enter name</label>
-    <input type="text" th:field="*{username}" id="name"/>
-    <br/>
+            <div id="password" class="input-group mb-3">
+                <input type="password" class="form-control" placeholder="Password" th:field="*{password}">
+            </div>
 
-    <label for="password">Enter password</label>
-    <input type="password" th:field="*{password}" id="password"/>
-    <br/>
+            <div id="age" class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Age" th:field="*{age}">
+            </div>
 
-    <label for="age">Enter age</label>
-    <input type="text" th:field="*{age}" id="age"/>
-    <br/>
+            <div id="email" class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Email" th:field="*{email}">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">@email.com</span>
+                </div>
+            </div>
 
-    <label for="email">Enter email</label>
-    <input type="text" th:field="*{email}" id="email"/>
-    <br/>
+            <div id="roles" class="input-group mb-3">
+                <select class="custom-select" id="inputGroupSelect02" th:field="*{roles}">
+                    <option th:each="role : ${allRoles}"
+                            th:text="${role.getName()}"
+                            th:value="${role.getId()}">One
+                    </option>
+                </select>
+                <div class="input-group-append">
+                    <label class="input-group-text" for="inputGroupSelect02">Roles</label>
+                </div>
+            </div>
 
-
-    <div th:each="role : ${allRoles}">
-        <label>
-            <input th:id="${role}" type="radio" th:field="*{roles}" th:value="${role.getId()}"/>
-        </label>
-        <label th:for="${role}" th:text="${role.getName()}">Role</label>
+            <button class="btn btn-success">
+                Add new user
+            </button>
+        </form>
     </div>
-    <input type="submit" value="Create"/>
-</form>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

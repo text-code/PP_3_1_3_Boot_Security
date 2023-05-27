@@ -2,7 +2,7 @@ package ru.kata.spring.boot_security.demo.service;
 
 import ru.kata.spring.boot_security.demo.model.User;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface UserService {
 
@@ -12,7 +12,7 @@ public interface UserService {
 
     User getUserByUsername(String name);
 
-    Collection<User> getAllUsers();
+    List<User> getAllUsers();
 
     void updateUser(User updatedUser);
 
