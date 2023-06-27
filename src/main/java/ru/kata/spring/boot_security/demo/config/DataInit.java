@@ -21,10 +21,8 @@ public class DataInit {
 
     @PostConstruct
     private void init() {
-        roleService.saveRole(new Role("ROLE_USER"));
-
         User user = new User("admin", "admin", 100, "admin@email.com",
-                List.of(new Role("ROLE_ADMIN")));
+                List.of(new Role("ROLE_USER"), new Role("ROLE_ADMIN")));
 
         userService.saveUser(user);
     }

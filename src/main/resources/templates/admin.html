@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Users</title>
     <style>
-        table {
-            box-sizing: border-box;
-            margin-top: auto;
-            position: center;
-            margin-left: auto;
+        #registrationForm {
+            width: 400px;
+            margin: 50px auto 50px;
         }
     </style>
+
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -20,19 +20,18 @@
 </head>
 
 <body>
-<nav class="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-white" th:each="role : ${admin.getRoles()}"
-       th:text="${admin.getUsername()} + ' with roles: ' + ${role.getName()}">Admin</a>
+<nav id="navbar" class="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow">
+    <a id="adminRole" class="navbar-brand col-sm-3 col-md-2 mr-0 text-white">Admin Role</a>
     <ul class="navbar-nav px-3">
         <form class="nav-item text-nowrap" th:method="POST" th:action="@{/logout}">
-                <input class="btn" type="submit" value="Logout" style="color: grey"/>
+            <input class="btn" type="submit" value="Logout" style="color: grey"/>
         </form>
     </ul>
 </nav>
 
 <div class="container-fluid">
     <div class="row">
-        <!--region sidebar-->
+
         <div class="d-flex flex-column flex-shrink-0 p-3 bg-light col-lg-2" id="nav">
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
@@ -41,68 +40,143 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="admin/1">
+                    <a class="nav-link" href="/user">
                         User
-                    </a>
-                </li>
-                <br>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/registration">
-                        New User
                     </a>
                 </li>
             </ul>
         </div>
-        <!--endregion-->
 
-        <nav class="col-lg-10">
+        <nav class="col-lg-10 border">
             <h1>Admin panel</h1>
-            <!--region table-->
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Age</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Password</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Edit</th>
-                    <th scope="col">Delete</th>
-                </tr>
-                </thead>
-                <tbody th:each="user : ${users}">
-                <tr>
-                    <td th:text="${user.getId()}">Id</td>
-                    <td th:text="${user.getUsername()}">Name</td>
-                    <td th:text="${user.getAge()}">Age</td>
-                    <td th:text="${user.getEmail()}">Email</td>
-                    <td th:value="${user.getPassword()}">****</td>
-                    <td th:each="role : ${user.getRoles()}" th:text="${role.getName()}">Role</td>
-                    <td>
-                        <form th:method="GET" th:action="@{admin/{id}/edit(id = ${user.getId()})}">
-                            <input class="btn btn-primary" type="submit" value="Edit"
-                                   data-toggle="modal" data-target="#edit"/>
-                        </form>
-                    </td>
-                    <td>
-                        <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
-                            <input class="btn btn-secondary" type="submit" value="Delete"/>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <!--endregion-->
+
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a onclick="openTable()" id="checkUsersTable" class="nav-link active" href="#userTable">Users
+                        table</a>
+                </li>
+                <li class="nav-item">
+                    <a onclick="openRegForm()" id="checkNewUser" class="nav-link" href="#newUser">New User</a>
+                </li>
+            </ul>
+
+            <div class="card" id="userTable">
+                <h5 class="card-header">All users</h5>
+                <div class="card-body">
+                    <table id="tableUsers" class="table table-striped ">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Password</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody id="adminTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="display: none" id="newUser">
+                <h5 class="card-header">Add new user</h5>
+                <div class="card-body" id="registrationForm">
+
+                    <div class="input-group mb-3">
+                        <input id="name" type="text" name="username" class="form-control" placeholder="Username">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="Password">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" name="age" class="form-control" placeholder="Age">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" name="email" class="form-control" placeholder="Email">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2">@email.com</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <select name="roles" class="custom-select" id="select"></select>
+                        <div class="input-group-append">
+                            <label class="input-group-text" for="select">Roles</label>
+                        </div>
+                    </div>
+
+                    <button onclick="sendForm()" type="submit" class="btn btn-success">Add new user</button>
+
+                </div>
+            </div>
         </nav>
     </div>
 </div>
 
+<div id="editUser" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit user</h5>
+                <button onclick="closeModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <div class="input-group mb-3">
+                        <input type="text" name="id" class="form-control" readonly placeholder="ID">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" name="username" class="form-control" placeholder="Username">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="Password">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" name="age" class="form-control" placeholder="Age">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input type="text" name="email" class="form-control" placeholder="Email">
+                        <div class="input-group-append">
+                            <span class="input-group-text">@email.com</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <select name="roles" class="custom-select" id="selectEdit"></select>
+                        <div class="input-group-append">
+                            <label class="input-group-text" for="selectEdit">Roles</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button onclick="saveChange()" type="button" class="btn btn-primary">Save changes</button>
+                <button onclick="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/adminPage.js"></script>
+<script src="/static/js/create.js"></script>
+<script src="/js/editDelete.js"></script>
+
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>

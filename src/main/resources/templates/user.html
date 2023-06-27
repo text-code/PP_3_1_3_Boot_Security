@@ -23,9 +23,8 @@
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0 text-white" th:each="role : ${user.getRoles()}"
-       th:text="${user.getUsername()} + ' with roles: ' + ${role.getName()}">Admin</a>
+<nav id="navbar" class="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow">
+    <a id="userRole" class="navbar-brand col-sm-3 col-md-2 mr-0 text-white">User Role</a>
     <ul class="navbar-nav px-3">
         <form class="nav-item text-nowrap" th:method="POST" th:action="@{/logout}">
             <input class="btn" type="submit" value="Logout" style="color: grey"/>
@@ -35,54 +34,46 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!--region sidebar-->
+
         <div class="d-flex flex-column flex-shrink-0 p-3 bg-light col-lg-2" id="nav">
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="admin/1">
+                    <a class="nav-link active" href="">
                         User
                     </a>
                 </li>
             </ul>
         </div>
-        <!--endregion-->
 
-        <nav class="col-lg-10">
-            <h1>User information bar</h1>
+        <nav class="col-lg-10 border">
+            <h1>User information-page</h1>
 
-            <!--region table-->
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Age</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Password</th>
-                    <th scope="col">Role</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td th:text="${user.getId()}">Id</td>
-                    <td th:text="${user.getUsername()}">Name</td>
-                    <td th:text="${user.getAge()}">Age</td>
-                    <td th:text="${user.getEmail()}">Email</td>
-                    <td th:value="${user.getPassword()}">****</td>
-                    <td th:each="role : ${user.getRoles()}" th:text="${role.getName()}">Role</td>
-                </tr>
-                </tbody>
-            </table>
-            <!--endregion-->
+            <div class="card" id="userTable">
+                <h5 class="card-header">About user</h5>
+                <div class="card-body">
+                    <table id="tableUsers" class="table table-striped ">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Password</th>
+                            <th scope="col">Role</th>
+                        </tr>
+                        </thead>
+                        <tbody id="userTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
         </nav>
     </div>
 </div>
 
+<script src="/static/js/userPage.js"></script>
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
