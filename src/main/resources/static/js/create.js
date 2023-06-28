@@ -21,14 +21,14 @@ async function sendForm() {
         email = form.querySelector('[name="email"]'),
         role = form.querySelector('[name="roles"]');
 
-    let roles = {id: role.value, name: ""};
+    let roles = rolesMultiple(role);
 
     const value = {
         username: name.value,
         password: password.value,
         age: age.value,
         email: email.value,
-        roles: [roles]
+        roles: roles
     }
 
     await fetch('admin/registration', {
@@ -40,4 +40,20 @@ async function sendForm() {
     });
 
     openTable();
+}
+
+function rolesMultiple(role) {
+    let roles = [];
+
+    if (role.multiple) {
+        for (let i = 0; i < role.options.length; i++) {
+            if(role.options[i].selected) {
+                roles.push({id: role.options[i].value, name: ""});
+            }
+        }
+    } else {
+        roles.push(role.value);
+    }
+
+    return roles;
 }

@@ -40,9 +40,9 @@ public class AdminController {
         userService.updateUserDto(userDto);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
+    @DeleteMapping("/delete")
+    public void delete(@RequestBody UserDto userDto) {
+        userService.deleteUser(userDto.getId());
     }
 
     @GetMapping("/current")

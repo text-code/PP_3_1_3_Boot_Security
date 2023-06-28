@@ -50,15 +50,14 @@ function createTableBody() {
                         <td>
                             <div>
                                 <input onclick="editUser(${user.id})" 
-                                class="btn btn-primary" type="submit" value="Edit" 
-                                data-toggle="modal" data-target="#edit"/>
+                                class="btn btn-primary" type="submit" value="Edit"/>
                             </div>
                         </td>
                         <td>
-                            <form action="/admin">
-                                <input onclick="deleteUser(${user.id})" class="btn btn-secondary" 
-                                type="submit" value="Delete"/>
-                            </form>
+                            <div>
+                                <input onclick="deleteUserForm(${user.id})" 
+                                class="btn btn-secondary" type="submit" value="Delete"/>
+                            </div>
                         </td>
                     </tr>
                 `);
@@ -85,5 +84,3 @@ let openRegForm = () => {
     userTable.style.display = "none";
     newUser.style.display = "block";
 };
-
-

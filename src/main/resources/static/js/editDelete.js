@@ -10,41 +10,48 @@ let openModal = () => {
 let closeModal = () => {
     modal.style.display = "none";
 }
-const userId = form.querySelector('[name="id"]'),
-    name = form.querySelector('[name="username"]'),
-    password = form.querySelector('[name="password"]'),
-    age = form.querySelector('[name="age"]'),
-    email = form.querySelector('[name="email"]'),
-    role = form.querySelector('[name="roles"]');
 
-async function editUser(id) {
+function editUser(id) {
     openModal()
 
-    await fetch(`/admin/${id}`)
+    const userId = form.querySelector('[name="id"]'),
+        name = form.querySelector('[name="username"]'),
+        age = form.querySelector('[name="age"]'),
+        email = form.querySelector('[name="email"]');
+
+    fetch(`/admin/${id}`)
         .then(response => response.json())
         .then(user => {
             userId.value = user.id;
             name.value = user.username;
-            // password.textContent = "****";
             age.value = user.age;
             email.value = user.email;
         });
-}
 
-fetch("admin/roles")
-    .then((response) => response.json())
-    .then((data) => {
-        let select = document.getElementById('selectEdit');
-        for (let role of data) {
-            select.insertAdjacentHTML("afterbegin", `
+    fetch("admin/roles")
+        .then((response) => response.json())
+        .then((data) => {
+            let select = document.getElementById('selectEdit');
+            select.innerHTML = "";
+            for (let role of data) {
+                select.insertAdjacentHTML("afterbegin", `
                     <option value="${role.id}">${role.name}</option>
                 `)
-        }
-    });
+            }
+        });
+}
+
+
 
 async function saveChange() {
+    const userId = form.querySelector('[name="id"]'),
+        name = form.querySelector('[name="username"]'),
+        password = form.querySelector('[name="password"]'),
+        age = form.querySelector('[name="age"]'),
+        email = form.querySelector('[name="email"]'),
+        role = form.querySelector('[name="roles"]');
 
-    let roles = {id: role.value, name: ""};
+    let roles = rolesMultiple(role);
 
     const value = {
         id: userId.value,
@@ -52,7 +59,7 @@ async function saveChange() {
         password: password.value,
         age: age.value,
         email: email.value,
-        roles: [roles]
+        roles: roles
     }
 
     await fetch("/admin/edit", {
@@ -67,8 +74,67 @@ async function saveChange() {
     openTable();
 }
 
-async function deleteUser(id) {
-    await fetch('/admin/' + id, {
-        method: 'DELETE'
+
+
+
+let modalDelete = document.getElementById("deleteUser");
+let formDelete = document.getElementById("deleteUserForm");
+
+let openModalDelete = () => {
+    modalDelete.style.display = "block";
+}
+
+let closeModalDelete = () => {
+    modalDelete.style.display = "none";
+}
+
+async function deleteUserForm(id) {
+    openModalDelete()
+
+    const userId = formDelete.querySelector('[name="id"]'),
+        name = formDelete.querySelector('[name="username"]'),
+        age = formDelete.querySelector('[name="age"]'),
+        email = formDelete.querySelector('[name="email"]');
+
+
+
+    fetch(`/admin/${id}`)
+        .then(response => response.json())
+        .then(user => {
+            userId.value = user.id;
+            name.value = user.username;
+            age.value = user.age;
+            email.value = user.email;
+            let select = document.getElementById('selectDelete');
+            select.innerHTML = "";
+            for (let role of user.roles) {
+                select.insertAdjacentHTML("afterbegin", `
+                    <option value="${role.id}">${role.name}</option>
+                `)
+            }
+        });
+}
+
+async function deleteUser() {
+    const userId = formDelete.querySelector('[name="id"]');
+
+    const value = {
+        id: userId.value,
+        username: "",
+        password: "",
+        age: "",
+        email: "",
+        roles: []
+    }
+
+    await fetch("/admin/delete", {
+        method: 'DELETE',
+        headers: {
+            "Content-type": "application/json;charset=utf-8"
+        },
+        body: JSON.stringify(value)
     });
+
+    closeModalDelete();
+    openTable();
 }
